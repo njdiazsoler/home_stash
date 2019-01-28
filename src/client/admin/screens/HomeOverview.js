@@ -1,7 +1,5 @@
 import React from 'react';
 import injectStyle from 'react-jss';
-import { Row, Col } from 'react-bootstrap';
-import SideBar from '../components/SideBar';
 import StashHandler from '../components/StashHandler';
 
 const Home = (props) => {
@@ -12,17 +10,16 @@ const Home = (props) => {
   const { classes } = props;
 
   return (
-    <div>
-      <Row>
-        <Col xs={2}>
-          <SideBar />
-        </Col>
-        <Col xs={10}>
-          <StashHandler data={stashData} />
-        </Col>
-      </Row>
+    <div className={classes.homeContainer}>
+      <StashHandler data={stashData} />
     </div>
   )
 }
 
-export default Home;
+const styles = {
+  homeContainer: {
+    height: '100%',
+  },
+}
+
+export default injectStyle(styles)(Home);
