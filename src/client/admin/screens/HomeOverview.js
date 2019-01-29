@@ -1,17 +1,23 @@
 import React from 'react';
 import injectStyle from 'react-jss';
-import StashHandler from '../components/StashHandler';
+import { Button } from 'react-bootstrap';
+import Title from '../components/Title';
 
 const Home = (props) => {
-  const stashData = [
-    { name: 'Kitchen', createdById: 1, items: [], creationDate: '2019-01-28 00:00:00-0300' },
-    { name: 'Bathroom', createdById: 1, items: [], creationDate: '2019-01-28 00:00:00-0300' },
-  ]
   const { classes } = props;
 
   return (
     <div className={classes.homeContainer}>
-      <StashHandler data={stashData} />
+      {props.data.map(stash => {
+        return (
+          <div key={stash.name}>
+            <Title onClick='#'>{stash.name}</Title>
+            <p>{stash.creationDate}</p>
+          </div>)
+      })}
+      <div>
+        <Button variant='primary'>Test</Button>
+      </div>
     </div>
   )
 }
@@ -19,6 +25,7 @@ const Home = (props) => {
 const styles = {
   homeContainer: {
     height: '100%',
+    textAlign: 'center',
   },
 }
 
