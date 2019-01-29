@@ -1,19 +1,79 @@
 import React, { Component } from 'react';
 import Title from '../components/Title';
 import injectStyle from 'react-jss';
-import { Button, ListGroup, Modal } from 'react-bootstrap';
+import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 
 class StashOverview extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showNewItemModal: false
+      formFields: {
+        name: '',
+        quantityAmount: '',
+        quantityType: '',
+        purchaseDate: '',
+        estimatedDurability: '',
+      },
+      showNewItemModal: false,
+
     };
+  }
+
+  cancelForm = () => {
+    const formFields = { name: '', quantity: '', purchaseDate: '', estimatedDurability: ''};
+    this.setState({ showNewItemModal: !this.state.showNewItemModal, formFields: formFields });
+  }
+
+  handleChange = (e) => {
+    const formFields = this.state.formFields;
+    formFields[e.target.id] = e.target.value;
+    console.log(e.target.id, e.target.value)
+    this.setState({ formFields: formFields });
   }
 
   addNewItemModal = () => {
     return (
       <Modal show={this.state.showNewItemModal} onHide={() => this.setState({ showNewItemModal: false })}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Item</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId='name'>
+              <Form.Label>Item Name</Form.Label>
+              <Form.Control type='text' placeholder='Enter item name here' value={this.state.formFields.name} onChange={this.handleChange} />
+            </Form.Group>
+            <Form.Row className={this.props.classes.quantityRow}>
+              <Form.Group className={this.props.classes.quantityField} controlId='quantityAmount'>
+                <Form.Label>Quantity</Form.Label>
+                <Form.Control  type='number' min='1' placeholder='Enter quantity here' value={this.state.formFields.quantity} onChange={this.handleChange} />
+              </Form.Group>
+              <Form.Group controlId='quantityType'>
+                <Form.Label>Type</Form.Label>
+                <Form.Control as='select' value={this.state.formFields.quantityType} onChange={this.handleChange}>
+                <option value=''></option>
+                <option value='units'>Units</option>
+                <option value='kg'>Kilograms</option>
+                <option value='lb'>Pounds</option>
+                </Form.Control>
+              </Form.Group>
+            </Form.Row>
+            <Form.Group controlId='purchaseDate'>
+              <Form.Label>Purchase Date</Form.Label>
+              <Form.Control type='date' value={this.state.formFields.purchaseDate} onChange={this.handleChange}>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId='estimatedDurability'>
+              <Form.Label>Durability</Form.Label>
+              <Form.Control type='date' min={this.state.formFields.estimatedDurability} value={this.state.formFields.estimatedDurability} onChange={this.handleChange}>
+              </Form.Control>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='info'>Save Item</Button>
+          <Button variant='secondary' onClick={this.cancelForm}>Cancel</Button>
+        </Modal.Footer>
       </Modal>
     )
   }
@@ -29,8 +89,10 @@ class StashOverview extends Component {
             return <ListGroup className={classes.listItem} key={item.id}>
               {/* <ListGroup.Item> */}
               <h2>{item.name}</h2>
+              <h5>Purchase Date</h5>
               <p>{item.purchaseDate}</p>
-              <p>{item.durability}</p>
+              <h5>Durability</h5>
+              <p>{calculateDurability(item.purchaseDate, item.estimatedDurability)} day(s)</p>
               <div className={classes.buttonGroup}>
                 <Button size='sm' variant='info'>Edit</Button>
                 <Button size='sm' variant='secondary'>Delete</Button>
@@ -38,11 +100,17 @@ class StashOverview extends Component {
               {/* </ListGroup.Item> */}
             </ListGroup>
           })}
-          <Button className={classes.addNewButton} size='lg' variant='primary'>Add New Item</Button>
+          <Button className={classes.addNewButton} size='lg' variant='secondary' onClick={() => this.setState({ showNewItemModal: true })}>Add New Item</Button>
         </div>
       </div>
     )
   }
+}
+
+const calculateDurability = (pd, d) => {
+  let start = new Date(pd);
+  let end = new Date(d);
+  return (end - start) / 86400000;
 }
 
 const styles = {
@@ -75,6 +143,16 @@ const styles = {
   overviewContainer: {
     position: 'relative',
     width: '100%',
+  },
+  quantityField: {
+    width: '50%',
+  },
+  quantityRow: {
+    display: 'flex',
+    flexFlow: 'row',
+    justifyContent: 'space-between',
+    marginLeft: '0',
+    marginRight: '0',
   },
 }
 

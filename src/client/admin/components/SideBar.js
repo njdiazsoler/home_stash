@@ -6,28 +6,31 @@ import { Button } from 'react-bootstrap';
 
 
 const SideBar = (props) => {
-
+  
   const { classes } = props
   return (
     <div>
-        <h2>Overview</h2>
+      <h2>Overview</h2>
       <nav>
         <ul className={classes.navList}>
           <li>
-            <SideBarLink path="/kitchen" text='Kitchen' />
+            <Button variant='secondary'>
+              <SideBarLink path="/kitchen" text='Kitchen' />
+            </Button>
           </li>
           <li>
-            <SideBarLink path="/bathroom" text='Bathroom' />
+            <Button variant='secondary'>
+              <SideBarLink path="/bathroom" text='Bathroom' />
+            </Button>
           </li>
         </ul>
       </nav>
       <Link to='/'>
-        <Button>
+        <Button variant='info'>
           Home
       </Button>
       </Link>
     </div>
-
   )
 }
 

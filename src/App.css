@@ -1,4 +1,6 @@
 .App {
+  display: flex;
+  flex-flow: wrap;
+  height: 100vh;
   text-align: center;
 }
-

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Home from './client/admin/screens/HomeOverview';
 import './App.css';
-import { Row } from 'react-bootstrap';
 import injectStyle from 'react-jss';
 import SideBar from './client/admin/components/SideBar';
 import { Route, Switch } from "react-router-dom";
@@ -13,7 +12,6 @@ class App extends Component {
     const { classes } = this.props
     return (
       <div className="App">
-        <Row>
           <div className={classes.sideBarContainer}>
               <SideBar />
           </div>
@@ -24,7 +22,6 @@ class App extends Component {
               <Route path='/:id' component={handleRoute} />
             </Switch>
           </div>
-        </Row>
       </div>
     );
   }
@@ -36,16 +33,16 @@ const handleRoute = ({ match }) => {
       name: 'kitchen',
       createdById: 1,
       items: [
-        { id: 1, name: 'Detergent', durability: 1209600000, purchaseDate: '2019-01-20 13:00:00-0300' },
-        { id: 2, name: 'Oven Cleaner', durability: 2592000000, purchaseDate: '2019-01-20 13:00:00-0300' },
+        { id: 1, name: 'Detergent', quantity: 2, quantityType: 'units', estimatedDurability: '2019-02-04', purchaseDate: '2019-01-20' },
+        { id: 2, name: 'Oven Cleaner', quantity: 2, quantityType: 'units', estimatedDurability: '2019-02-20', purchaseDate: '2019-01-20' },
       ],
-      creationDate: '2019-01-28 00:00:00-0300'
+      creationDate: '2019-01-28'
     },
     {
       name: 'bathroom',
       createdById: 1,
       items: [],
-      creationDate: '2019-01-28 00:00:00-0300'
+      creationDate: '2019-01-28'
     },
   ]
   if (match.url !== '/') {
@@ -66,6 +63,7 @@ const styles = {
     backgroundColor: 'white',
     display: 'flex',
     width: '85%',
+    height: '100%'
   },
   sideBarContainer: {
     alignItems: 'center',
@@ -73,7 +71,6 @@ const styles = {
     color: 'white',
     display: 'flex',
     flexFlow: 'column',
-    height: '100vh',
     width: '13%'
   },
 }
