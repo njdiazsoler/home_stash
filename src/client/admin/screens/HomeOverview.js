@@ -24,7 +24,6 @@ const Home = (props) => {
 
 const styles = {
   homeContainer: {
-    height: '100%',
     textAlign: 'center',
   },
 }

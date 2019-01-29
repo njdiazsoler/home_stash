@@ -33,8 +33,9 @@ const SideBar = (props) => {
 
 const styles = {
   navList: {
+    display: 'block',
     listStyleType: 'none',
-    paddingInlineStart: '0',
+    padding: ' 10px 50px',
   },
 }
 

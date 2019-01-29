@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Home from './client/admin/screens/HomeOverview';
 import './App.css';
-import { Row, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import injectStyle from 'react-jss';
 import SideBar from './client/admin/components/SideBar';
 import { Route, Switch } from "react-router-dom";
@@ -15,17 +15,15 @@ class App extends Component {
       <div className="App">
         <Row>
           <div className={classes.sideBarContainer}>
-            <Col xs={2} md="auto">
               <SideBar />
-            </Col>
           </div>
-          <Col className={classes.contentContainer}>
+          <div className={classes.contentContainer}>
             <Switch>
               <Route exact path='/' component={handleRoute} />
               <Route exact path='/home' component={handleRoute} />
               <Route path='/:id' component={handleRoute} />
             </Switch>
-          </Col>
+          </div>
         </Row>
       </div>
     );
@@ -66,6 +64,8 @@ const handleRoute = ({ match }) => {
 const styles = {
   contentContainer: {
     backgroundColor: 'white',
+    display: 'flex',
+    width: '85%',
   },
   sideBarContainer: {
     alignItems: 'center',
@@ -74,6 +74,7 @@ const styles = {
     display: 'flex',
     flexFlow: 'column',
     height: '100vh',
+    width: '13%'
   },
 }
 
