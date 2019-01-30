@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 
 
 const SideBar = (props) => {
-  
+
   const { classes } = props
   return (
     <div>
@@ -14,12 +14,12 @@ const SideBar = (props) => {
       <nav>
         <ul className={classes.navList}>
           <li>
-            <Button variant='secondary'>
+            <Button style={{ width: '100%' }} variant='secondary'>
               <SideBarLink path="/kitchen" text='Kitchen' />
             </Button>
           </li>
           <li>
-            <Button variant='secondary'>
+            <Button  variant='secondary'>
               <SideBarLink path="/bathroom" text='Bathroom' />
             </Button>
           </li>

@@ -150,7 +150,7 @@ const styles = {
   quantityRow: {
     display: 'flex',
     flexFlow: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     marginLeft: '0',
     marginRight: '0',
   },
