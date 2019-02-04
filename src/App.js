@@ -6,8 +6,13 @@ import SideBar from './client/admin/components/SideBar';
 import { Route, Switch } from "react-router-dom";
 import StashOverview from './client/admin/components/StashOverview';
 
-
 class App extends Component {
+  constructor(props) {
+    super(props),
+    this.state = {
+      isLoading: true,
+    }
+  }
   render() {
     const { classes } = this.props
     return (
@@ -25,6 +30,9 @@ class App extends Component {
       </div>
     );
   }
+}
+componentDidMount = () => {
+
 }
 
 const handleRoute = ({ match }) => {

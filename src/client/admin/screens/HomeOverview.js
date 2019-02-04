@@ -2,18 +2,8 @@ import React from 'react';
 import injectStyle from 'react-jss';
 import { Button } from 'react-bootstrap';
 import Title from '../components/Title';
-import sequelize from '../../../config/db'
 
 const Home = (props) => {
-
-  sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
 
   const { classes } = props;
   return (
