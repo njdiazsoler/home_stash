@@ -8,19 +8,19 @@ class StashOverview extends Component {
     super(props)
     this.state = {
       formFields: {
+        estimatedDurability: '',
         name: '',
         quantityAmount: '',
         quantityType: '',
         purchaseDate: '',
-        estimatedDurability: '',
       },
+      isLoading: true,
       showNewItemModal: false,
-
     };
   }
 
   cancelForm = () => {
-    const formFields = { name: '', quantity: '', purchaseDate: '', estimatedDurability: ''};
+    const formFields = { name: '', quantity: '', purchaseDate: '', estimatedDurability: '' };
     this.setState({ showNewItemModal: !this.state.showNewItemModal, formFields: formFields });
   }
 
@@ -46,15 +46,15 @@ class StashOverview extends Component {
             <Form.Row className={this.props.classes.quantityRow}>
               <Form.Group className={this.props.classes.quantityField} controlId='quantityAmount'>
                 <Form.Label>Quantity</Form.Label>
-                <Form.Control  type='number' min='1' placeholder='Enter quantity here' value={this.state.formFields.quantity} onChange={this.handleChange} />
+                <Form.Control type='number' min='1' placeholder='Enter quantity here' value={this.state.formFields.quantity} onChange={this.handleChange} />
               </Form.Group>
               <Form.Group controlId='quantityType'>
                 <Form.Label>Type</Form.Label>
                 <Form.Control as='select' value={this.state.formFields.quantityType} onChange={this.handleChange}>
-                <option value=''></option>
-                <option value='units'>Units</option>
-                <option value='kg'>Kilograms</option>
-                <option value='lb'>Pounds</option>
+                  <option value=''></option>
+                  <option value='units'>Units</option>
+                  <option value='kg'>Kilograms</option>
+                  <option value='lb'>Pounds</option>
                 </Form.Control>
               </Form.Group>
             </Form.Row>
@@ -82,12 +82,11 @@ class StashOverview extends Component {
     const { classes } = this.props
     return (
       <div className={classes.overviewContainer}>
-        {this.addNewItemModal()}
         <Title style={{ borderBottom: '2px solid black', paddingBottom: '2%', textTransform: 'capitalize', margin: '2% 5% 0' }}>{this.props.data.name}</Title>
+        {this.addNewItemModal()}
         <div className={classes.itemsContainer}>
           {this.props.data.items.map(function (item) {
             return <ListGroup className={classes.listItem} key={item.id}>
-              {/* <ListGroup.Item> */}
               <h2>{item.name}</h2>
               <h5>Purchase Date</h5>
               <p>{item.purchaseDate}</p>
@@ -139,6 +138,11 @@ const styles = {
     margin: '1%',
     padding: '2% 0%',
     width: '25%',
+  },
+  loaderContainer: {
+    position: 'relative',
+    maxHeight: '80vh',
+    maxWidth: '80vw',
   },
   overviewContainer: {
     position: 'relative',

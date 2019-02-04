@@ -14,19 +14,19 @@ const SideBar = (props) => {
       <nav>
         <ul className={classes.navList}>
           <li>
-            <Button style={{ width: '100%' }} variant='secondary'>
+            <Button style={{ width: '100%' }} variant='secondary' onClick={props.onClick}>
               <SideBarLink path="/kitchen" text='Kitchen' />
             </Button>
           </li>
           <li>
-            <Button  variant='secondary'>
+            <Button onClick={props.onClick} variant='secondary'>
               <SideBarLink path="/bathroom" text='Bathroom' />
             </Button>
           </li>
         </ul>
       </nav>
-      <Link to='/'>
-        <Button variant='info'>
+      <Link to='/home'>
+        <Button variant='info' onClick={props.onClick}>
           Home
       </Button>
       </Link>

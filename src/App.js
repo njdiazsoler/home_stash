@@ -8,31 +8,48 @@ import StashOverview from './client/admin/components/StashOverview';
 
 class App extends Component {
   constructor(props) {
-    super(props),
+    super(props);
     this.state = {
       isLoading: true,
     }
   }
+
+  componentDidMount = () => {
+    setTimeout(() => {
+      this.setState({ isLoading: false })
+    }, 2000)
+  }
+  
+  handleClick = () => {
+    setTimeout(() => {
+      this.setState({ isLoading: false })
+    }, 2000)
+    this.setState({ isLoading: true })
+  }
+
   render() {
     const { classes } = this.props
     return (
       <div className="App">
           <div className={classes.sideBarContainer}>
-              <SideBar />
+              <SideBar onClick={this.handleClick} />
           </div>
           <div className={classes.contentContainer}>
+            <h1>Home Stash</h1>
+            {this.state.isLoading ?
+            <div className={classes.loaderContainer}>
+            <img src='https://upload.wikimedia.org/wikipedia/commons/6/66/Loadingsome.gif' alt='loading...'/>
+            </div>:
             <Switch>
               <Route exact path='/' component={handleRoute} />
               <Route exact path='/home' component={handleRoute} />
               <Route path='/:id' component={handleRoute} />
             </Switch>
+            }
           </div>
       </div>
     );
   }
-}
-componentDidMount = () => {
-
 }
 
 const handleRoute = ({ match }) => {
@@ -53,7 +70,7 @@ const handleRoute = ({ match }) => {
       creationDate: '2019-01-28'
     },
   ]
-  if (match.url !== '/') {
+  if (match.url !== '/home' && match.url !== '/') {
     let curStash = {};
     stashData.forEach(function (stash) {
       if (stash.name === match.params.id) {
@@ -68,10 +85,18 @@ const handleRoute = ({ match }) => {
 
 const styles = {
   contentContainer: {
+    alignItems: 'center',
     backgroundColor: 'white',
     display: 'flex',
+    flexFlow: 'column',
+    height: '100%',
     width: '85%',
-    height: '100%'
+  },
+  loaderContainer: {
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+    width: '50%',
   },
   sideBarContainer: {
     alignItems: 'center',
