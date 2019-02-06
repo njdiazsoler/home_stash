@@ -1,6 +1,7 @@
+import ApiBase from '../api/apiBase'
+import injectStyle from 'react-jss';
 import React, { Component } from 'react';
 import Title from '../components/Title';
-import injectStyle from 'react-jss';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 
 class StashOverview extends Component {
@@ -22,6 +23,11 @@ class StashOverview extends Component {
   cancelForm = () => {
     const formFields = { name: '', quantity: '', purchaseDate: '', estimatedDurability: '' };
     this.setState({ showNewItemModal: !this.state.showNewItemModal, formFields: formFields });
+  }
+
+  componentDidMount = () => {
+    const data = ApiBase.api()
+    return
   }
 
   handleChange = (e) => {

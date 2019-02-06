@@ -7,22 +7,20 @@ import { Button } from 'react-bootstrap';
 
 const SideBar = (props) => {
 
-  const { classes } = props
+  const { classes, data } = props;
   return (
     <div>
       <h2>Overview</h2>
       <nav>
         <ul className={classes.navList}>
-          <li>
-            <Button style={{ width: '100%' }} variant='secondary' onClick={props.onClick}>
-              <SideBarLink path="/kitchen" text='Kitchen' />
-            </Button>
-          </li>
-          <li>
-            <Button onClick={props.onClick} variant='secondary'>
-              <SideBarLink path="/bathroom" text='Bathroom' />
-            </Button>
-          </li>
+          {data.stashData ?
+            data.stashData.map(function(data) 
+            { return (<li className={classes.buttonMargin}>
+              <Button style={{ width: '100%', textTransform: 'capitalize' }} variant='secondary' onClick={props.onClick}>
+                <SideBarLink path={`/${data.name}`} text={data.name}/>
+              </Button>
+            </li>)}) :
+            null}
         </ul>
       </nav>
       <Link to='/home'>
@@ -35,6 +33,9 @@ const SideBar = (props) => {
 }
 
 const styles = {
+  buttonMargin: {
+    marginBottom: '1vh',
+  },
   navList: {
     display: 'block',
     listStyleType: 'none',
