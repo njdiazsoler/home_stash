@@ -12,7 +12,8 @@ class App extends Component {
     super(props);
     this.state = {
       response: '',
-      data: '',
+      data: [],
+      // isLoading: true,
     }
   }
 
@@ -23,54 +24,61 @@ class App extends Component {
     //   data: response,
     // });
     fetch('http://localhost:3002/home')
-        .then(response => response.json())
-        .then(result => { this.setState ({ data: result});})
-    setTimeout(() => {
-      this.setState({ isLoading: false })
-    }, 5000)
-  }
-
-  handleClick = () => {
-    setTimeout(() => {
-      this.setState({ isLoading: false })
-    }, 2000)
-    this.setState({ isLoading: true })
-  }
-
-  handleRoute = ({ match }) => {
-    const stashData = this.state.data;
-    console.log(stashData);
-    if (match.url !== '/home' && match.url !== '/') {
-      let curStash = {};
-      stashData.forEach(function (stash) {
-        if (stash.name === match.params.id) {
-          curStash = stash;
-        }
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        this.setState({ data: result });
       })
-      return <StashOverview data={curStash} />
-    } else {
-      return <Home data={stashData} />
-    }
+  setTimeout(() => {
+    this.setState({ isLoading: false })
+  }, 5000)
   }
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className="App">
-        <div className={classes.sideBarContainer}>
-          <SideBar onClick={this.handleClick} data={this.state.data} />
-        </div>
-        <div className={classes.contentContainer}>
-          <h1>Home Stash</h1>
-          <Switch>
-            <Route exact path='/' component={this.handleRoute} />
-            <Route exact path='/home' component={this.handleRoute} />
-            <Route path='/:id' component={this.handleRoute} />
-          </Switch>
-        </div>
-      </div>
-    );
+handleClick = () => {
+  setTimeout(() => {
+    this.setState({ isLoading: false })
+  }, 2000)
+  this.setState({ isLoading: true })
+}
+
+handleRoute = ({ match }) => {
+  const { stashData } = this.state.data;
+  console.log(stashData)
+  if (match.url !== '/home' && match.url !== '/') {
+    let curStash = {};
+    stashData.forEach(function (stash) {
+      if (stash.name === match.params.id) {
+        curStash = stash;
+      }
+    })
+    return <StashOverview data={curStash} />
+  } else {
+    console.log('intento de creación de stashes', stashData)
+    return <Home data={this.state.data.stashData} />
   }
+}
+
+render() {
+  const { classes } = this.props;
+  return (
+    <div className="App">
+      <div className={classes.sideBarContainer}>
+        <SideBar onClick={this.handleClick} data={this.state.data} />
+      </div>
+      <div className={classes.contentContainer}>
+        <h1>Home Stash</h1>
+        {this.state.isLoading?
+        null :
+        <Switch>
+          {/* <Route exact path='/' component={this.handleRoute} /> */}
+          {/* <Route exact path='/home' component={this.handleRoute} /> */}
+          <Route path='/home/:id' component={this.handleRoute} />
+        </Switch>
+        }
+      </div>
+    </div>
+  );
+}
 }
 
 

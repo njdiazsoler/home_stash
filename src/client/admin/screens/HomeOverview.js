@@ -8,29 +8,30 @@ class Home extends Component {
     super(props);
     this.state = {
       response: '',
-      data: this.props.data || '',
+      data: [],
       isLoading: true
     }
   }
 
   componentDidMount = () => {
     setTimeout(() => {
-      this.setState({ isLoading: false })
+      this.setState({ isLoading: false, data: this.props.data })
     }, 2000)
   }
 
   render() {
-    const { classes, data } = this.props;
+    console.log(this.state.data)
+    const { classes } = this.props;
     return (
       <div className={classes.homeContainer}>
         {this.state.isLoading ?
           <div className={classes.loaderContainer}>
             <img src='https://upload.wikimedia.org/wikipedia/commons/6/66/Loadingsome.gif' alt='loading...' style={{ maxWidth: '50vw', maxHeight: '50vh' }} />
           </div> :
-          data.map(stash => {
+          this.state.data.map(stash => {
             return (
-              <div key={stash.name} className={classes.stashName}>
-                <Title onClick='#'>{stash.name}</Title>
+              <div key={stash.id} className={classes.stashName}>
+                <Title key={stash.name} onClick='#'>{stash.name}</Title>
                 <p>{stash.createdAt}</p>
               </div>)
           })}
