@@ -15,9 +15,9 @@ const SideBar = (props) => {
         <ul className={classes.navList}>
           {data.stashData ?
             data.stashData.map(function(data) 
-            { return (<li className={classes.buttonMargin}>
+            { return (<li key={data.id} className={classes.buttonMargin}>
               <Button style={{ width: '100%', textTransform: 'capitalize' }} variant='secondary' onClick={props.onClick}>
-                <SideBarLink path={`/home/${data.name}`} text={data.name}/>
+                <SideBarLink path={`/home/${data.name}`} text={data.name} data={data}/>
               </Button>
             </li>)}) :
             null}

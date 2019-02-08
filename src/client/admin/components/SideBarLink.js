@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const SideBarLink = props => {
   return (
-    <Link className={props.classes.noFormat} to={props.path}>{props.text}</Link>
+    <Link className={props.classes.noFormat} to={{pathname: props.path, state: props.data}} >{props.text}</Link>
   )
 }
 

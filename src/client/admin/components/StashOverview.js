@@ -7,9 +7,11 @@ import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 class StashOverview extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       curRoute: '',
-      data: this.props.data || [],
+      data: this.props.location.state,
+      itemData: [],
       formFields: {
         estimatedDurability: '',
         name: '',
@@ -31,12 +33,12 @@ class StashOverview extends Component {
     fetch(`http://localhost:3002/home/${this.props.data.name}`)
       .then(response => response.json())
       .then(result => {
-        this.setState({ data: result });
-      })
-  setTimeout(() => {
-    this.setState({ isLoading: false })
-  }, 5000)
-    return
+        this.setState({ itemData: result });
+      });
+
+    setTimeout(() => {
+      this.setState({ isLoading: false })
+    }, 2000)
   }
 
   handleChange = (e) => {
@@ -46,6 +48,7 @@ class StashOverview extends Component {
   }
 
   addNewItemModal = () => {
+    console.log(this.props.location.state);
     return (
       <Modal show={this.state.showNewItemModal} onHide={() => this.setState({ showNewItemModal: false })}>
         <Modal.Header closeButton>
@@ -99,22 +102,26 @@ class StashOverview extends Component {
         <Title style={{ borderBottom: '2px solid black', paddingBottom: '2%', textTransform: 'capitalize', margin: '2% 5% 0' }}>{this.props.data.name}</Title>
         {this.addNewItemModal()}
         <div className={classes.itemsContainer}>
-          {this.state.data && this.state.data.length > 0 ?
-          this.state.data.map(function (item) {
-            return <ListGroup className={classes.listItem} key={item.id}>
-              <h2>{item.name}</h2>
-              <h5>Purchase Date</h5>
-              <p>{item.purchaseDate}</p>
-              <h5>Durability</h5>
-              <p>{calculateDurability(item.purchaseDate, item.estimatedDurability)} day(s)</p>
-              <div className={classes.buttonGroup}>
-                <Button size='sm' variant='info'>Edit</Button>
-                <Button size='sm' variant='secondary'>Delete</Button>
-              </div>
-              {/* </ListGroup.Item> */}
-            </ListGroup>
-          }):
-          <div></div>}
+          {this.state.isLoading ?
+            <div className={classes.loaderContainer}>
+              <img src='https://upload.wikimedia.org/wikipedia/commons/6/66/Loadingsome.gif' alt='loading...' style={{ maxWidth: '50vw', maxHeight: '50vh' }} />
+            </div> :
+            this.state.itemData && this.state.itemData.length > 0 ?
+              this.state.itemData.map(function (item) {
+                return <ListGroup className={classes.listItem} key={item.id}>
+                  <h2 className={classes.itemName}>{item.name}</h2>
+                  <h5>Purchase Date</h5>
+                  <p>{item.purchaseDate}</p>
+                  <h5>Durability</h5>
+                  <p>{calculateDurability(item.purchaseDate, item.estimatedDurability)} day(s)</p>
+                  <div className={classes.buttonGroup}>
+                    <Button size='sm' variant='info'>Edit</Button>
+                    <Button size='sm' variant='secondary'>Delete</Button>
+                  </div>
+                  {/* </ListGroup.Item> */}
+                </ListGroup>
+              }) :
+              <div></div>}
           <Button className={classes.addNewButton} size='lg' variant='secondary' onClick={() => this.setState({ showNewItemModal: true })}>Add New Item</Button>
         </div>
       </div>
@@ -143,6 +150,9 @@ const styles = {
     flexFlow: 'row',
     justifyContent: 'space-evenly',
     padding: '2%',
+  },
+  itemName: {
+    textTransform: 'capitalize',
   },
   listItem: {
     backgroundColor: '#C9A468',
