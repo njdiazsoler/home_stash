@@ -1,4 +1,4 @@
-import ApiBase from '../api/apiBase'
+// import ApiBase from '../api/apiBase'
 import injectStyle from 'react-jss';
 import React, { Component } from 'react';
 import Title from '../components/Title';
@@ -6,7 +6,8 @@ import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 
 class StashOverview extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+    console.log(props);
     this.state = {
       formFields: {
         estimatedDurability: '',
@@ -26,7 +27,15 @@ class StashOverview extends Component {
   }
 
   componentDidMount = () => {
-    const data = ApiBase.api()
+    fetch(`http://localhost:3002/home/${this.props.data.name}`)
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        this.setState({ data: result });
+      })
+  setTimeout(() => {
+    this.setState({ isLoading: false })
+  }, 5000)
     return
   }
 
@@ -91,7 +100,8 @@ class StashOverview extends Component {
         <Title style={{ borderBottom: '2px solid black', paddingBottom: '2%', textTransform: 'capitalize', margin: '2% 5% 0' }}>{this.props.data.name}</Title>
         {this.addNewItemModal()}
         <div className={classes.itemsContainer}>
-          {this.props.data.items.map(function (item) {
+          {this.state.data && this.state.data.length > 0 ?
+          this.state.data.map(function (item) {
             return <ListGroup className={classes.listItem} key={item.id}>
               <h2>{item.name}</h2>
               <h5>Purchase Date</h5>
@@ -104,7 +114,8 @@ class StashOverview extends Component {
               </div>
               {/* </ListGroup.Item> */}
             </ListGroup>
-          })}
+          }):
+          null}
           <Button className={classes.addNewButton} size='lg' variant='secondary' onClick={() => this.setState({ showNewItemModal: true })}>Add New Item</Button>
         </div>
       </div>

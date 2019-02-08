@@ -5,7 +5,7 @@ import injectStyle from 'react-jss';
 import SideBar from './client/admin/components/SideBar';
 import { Route, Switch } from "react-router-dom";
 import StashOverview from './client/admin/components/StashOverview';
-import ApiBase from './client/admin/api/apiBase';
+// import ApiBase from './client/admin/api/apiBase';
 
 class App extends Component {
   constructor(props) {
@@ -43,12 +43,12 @@ handleClick = () => {
 
 handleRoute = ({ match }) => {
   const { stashData } = this.state.data;
-  console.log(stashData)
   if (match.url !== '/home' && match.url !== '/') {
     let curStash = {};
     stashData.forEach(function (stash) {
       if (stash.name === match.params.id) {
         curStash = stash;
+        console.log(match.params)
       }
     })
     return <StashOverview data={curStash} />
@@ -67,14 +67,11 @@ render() {
       </div>
       <div className={classes.contentContainer}>
         <h1>Home Stash</h1>
-        {this.state.isLoading?
-        null :
         <Switch>
-          {/* <Route exact path='/' component={this.handleRoute} /> */}
-          {/* <Route exact path='/home' component={this.handleRoute} /> */}
+          <Route exact path='/' component={this.handleRoute} />
+          <Route exact path='/home' component={this.handleRoute} />
           <Route path='/home/:id' component={this.handleRoute} />
         </Switch>
-        }
       </div>
     </div>
   );
