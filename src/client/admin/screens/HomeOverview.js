@@ -20,7 +20,6 @@ class Home extends Component {
   }
 
   render() {
-    console.log(this.state.data.stashData);
     const { classes } = this.props;
     return (
       <div className={classes.homeContainer}>

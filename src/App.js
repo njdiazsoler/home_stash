@@ -26,7 +26,6 @@ class App extends Component {
     fetch('http://localhost:3002/home')
       .then(response => response.json())
       .then(result => {
-        console.log(result);
         this.setState({ data: result });
       })
   setTimeout(() => {
@@ -42,20 +41,25 @@ handleClick = () => {
 }
 
 handleRoute = ({ match }) => {
-  const { stashData } = this.state.data;
-  if (match.url !== '/home' && match.url !== '/') {
+  const stashData = this.state.data.stashData;
+  console.log(stashData);
+  if (match.url !== '/home' && match.url !== '/' && match.url !== '/home/') {
     let curStash = {};
     stashData.forEach(function (stash) {
       if (stash.name === match.params.id) {
         curStash = stash;
-        console.log(match.params)
       }
     })
-    return <StashOverview data={curStash} />
+    console.log('stashdata is',   curStash)
+    return <StashOverview data={curStash} refresh={() => this.refreshItemList(curStash)}/>
   } else {
-    console.log('intento de creación de stashes', stashData)
-    return <Home data={this.state.data.stashData} />
+    return <Home data={this.state.data.stashData}/>
   }
+}
+
+refreshItemList = (data) => {
+  console.log('refreshing data...');
+  this.setState({ data: data })
 }
 
 render() {
@@ -70,6 +74,7 @@ render() {
         <Switch>
           <Route exact path='/' component={this.handleRoute} />
           <Route exact path='/home' component={this.handleRoute} />
+          <Route exact path='/home/' component={this.handleRoute} />
           <Route path='/home/:id' component={this.handleRoute} />
         </Switch>
       </div>

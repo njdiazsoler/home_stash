@@ -7,8 +7,9 @@ import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 class StashOverview extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
+      curRoute: '',
+      data: this.props.data || [],
       formFields: {
         estimatedDurability: '',
         name: '',
@@ -30,7 +31,6 @@ class StashOverview extends Component {
     fetch(`http://localhost:3002/home/${this.props.data.name}`)
       .then(response => response.json())
       .then(result => {
-        console.log(result);
         this.setState({ data: result });
       })
   setTimeout(() => {
@@ -42,7 +42,6 @@ class StashOverview extends Component {
   handleChange = (e) => {
     const formFields = this.state.formFields;
     formFields[e.target.id] = e.target.value;
-    console.log(e.target.id, e.target.value)
     this.setState({ formFields: formFields });
   }
 
@@ -94,7 +93,7 @@ class StashOverview extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes } = this.props;
     return (
       <div className={classes.overviewContainer}>
         <Title style={{ borderBottom: '2px solid black', paddingBottom: '2%', textTransform: 'capitalize', margin: '2% 5% 0' }}>{this.props.data.name}</Title>
@@ -115,7 +114,7 @@ class StashOverview extends Component {
               {/* </ListGroup.Item> */}
             </ListGroup>
           }):
-          null}
+          <div></div>}
           <Button className={classes.addNewButton} size='lg' variant='secondary' onClick={() => this.setState({ showNewItemModal: true })}>Add New Item</Button>
         </div>
       </div>
