@@ -3,6 +3,7 @@ import injectStyle from 'react-jss';
 import SideBarLink from './SideBarLink';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import colours from '../../resources/Colours'
 
 const SideBar = (props) => {
   let data = ['kitchen', 'bathroom', 'Store Room', 'Bedroom']
@@ -23,7 +24,7 @@ const SideBar = (props) => {
         </ul>
       </nav>
       <Link to='/home'>
-        <Button variant='info' onClick={props.onClick}>
+        <Button variant='info' className={classes.primaryButton} onClick={props.onClick}>
           Home
       </Button>
       </Link>
@@ -34,6 +35,9 @@ const SideBar = (props) => {
 const styles = {
   buttonMargin: {
     marginBottom: '1vh',
+  },
+  primaryButton: {
+    backgroundColor: colours.secondary,
   },
   navList: {
     display: 'block',

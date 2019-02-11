@@ -48,10 +48,11 @@ class StashOverview extends Component {
 
   deleteItem = () => {
     const { currentItem } = this.state;
-    fetch(`http://localhost:3002/home/${this.props.data.name}`, {
+    console.log(JSON.stringify(this.state.currentItem.id))
+    fetch(`http://localhost:3002/home/${this.props.data.name}/${currentItem.id}`, {
       method: 'delete',
-      body: JSON.stringify(currentItem.id),
-      headers: { 'Content-Type': 'application/json' },
+      // body: JSON.stringify({id: currentItem.id}),
+      // headers: { 'Content-Type': 'application/json' },
     })
       .then(response => response.json())
       .then(result => {
@@ -173,7 +174,7 @@ class StashOverview extends Component {
                   <h5>Durability</h5>
                   <p>{calculateDurability(item.purchaseDate, item.estimatedDurability)} day(s)</p>
                   <div className={classes.buttonGroup}>
-                    <Button size='sm' variant='info'>Edit</Button>
+                    <Button size='sm' className={classes.primaryButton} variant='info'>Edit</Button>
                     <Button size='sm' variant='secondary' onClick={() => this.handleDelete(item)}>Delete</Button>
                   </div>
                   {/* </ListGroup.Item> */}
@@ -213,7 +214,7 @@ const styles = {
     textTransform: 'capitalize',
   },
   listItem: {
-    backgroundColor: colours.primaryDark,
+    backgroundColor: colours.primary,
     border: '1px solid black',
     borderRadius: '15%',
     boxShadow: '5px 5px 2px grey',
@@ -227,6 +228,9 @@ const styles = {
     position: 'relative',
     maxHeight: '80vh',
     maxWidth: '80vw',
+  },
+  primaryButton: {
+    backgroundColor: colours.secondary,
   },
   overviewContainer: {
     position: 'relative',
