@@ -3,14 +3,19 @@ import injectStyle from 'react-jss';
 import React, { Component } from 'react';
 import Title from '../components/Title';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
+import moment from 'moment';
+import colours from '../../resources/Colours'
 
 class StashOverview extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      confirmAction: false,
       curRoute: '',
+      currentItem: '',
       data: this.props.location.state,
+      history: this.props.history || false,
       itemData: [],
       formFields: {
         estimatedDurability: '',
@@ -41,14 +46,66 @@ class StashOverview extends Component {
     }, 2000)
   }
 
+  deleteItem = () => {
+    const { currentItem } = this.state;
+    fetch(`http://localhost:3002/home/${this.props.data.name}`, {
+      method: 'delete',
+      body: JSON.stringify(currentItem.id),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(response => response.json())
+      .then(result => {
+        this.setState({ currentItem: '' });
+      });
+
+  }
+
+
   handleChange = (e) => {
     const formFields = this.state.formFields;
     formFields[e.target.id] = e.target.value;
     this.setState({ formFields: formFields });
   }
 
+  handleDelete = (item) => {
+    this.setState({ confirmAction: true, currentItem: item })
+  }
+
+  handleSubmit = () => {
+    const { formFields } = this.state;
+    if (formFields) {
+      formFields.stashId = this.state.data.id;
+      this.submitForm({ formFields });
+    }
+  }
+
+  submitForm = (opts) => {
+    console.log('Posting request to API, using data: ', JSON.stringify(opts.formFields));
+    fetch(`http://localhost:3002/home/${this.props.data.name}`,
+      {
+        method: 'post',
+        body: JSON.stringify(opts.formFields),
+        headers: { 'Content-Type': 'application/json' }
+      }).then(response => { response.json(); console.log(response); })
+      .then(this.setState({ showNewItemModal: false }))
+  }
+
+  confirmActionModal = () => {
+    return (<Modal show={this.state.confirmAction} onHide={() => this.setState({ confirmAction: false })}>
+      <Modal.Header closeButton>
+        <Modal.Title>Confirm Action</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>Are you sure you want to delete Item permanently?</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant='info' onClick={this.deleteItem}>Delete Item</Button>
+        <Button variant='secondary' onClick={() => this.setState({ confirmAction: false })}>Cancel</Button>
+      </Modal.Footer>
+    </Modal>)
+  }
+
   addNewItemModal = () => {
-    console.log(this.props.location.state);
     return (
       <Modal show={this.state.showNewItemModal} onHide={() => this.setState({ showNewItemModal: false })}>
         <Modal.Header closeButton>
@@ -88,7 +145,7 @@ class StashOverview extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='info'>Save Item</Button>
+          <Button variant='info' onClick={this.handleSubmit}>Save Item</Button>
           <Button variant='secondary' onClick={this.cancelForm}>Cancel</Button>
         </Modal.Footer>
       </Modal>
@@ -101,22 +158,23 @@ class StashOverview extends Component {
       <div className={classes.overviewContainer}>
         <Title style={{ borderBottom: '2px solid black', paddingBottom: '2%', textTransform: 'capitalize', margin: '2% 5% 0' }}>{this.props.data.name}</Title>
         {this.addNewItemModal()}
+        {this.confirmActionModal()}
         <div className={classes.itemsContainer}>
           {this.state.isLoading ?
             <div className={classes.loaderContainer}>
               <img src='https://upload.wikimedia.org/wikipedia/commons/6/66/Loadingsome.gif' alt='loading...' style={{ maxWidth: '50vw', maxHeight: '50vh' }} />
             </div> :
             this.state.itemData && this.state.itemData.length > 0 ?
-              this.state.itemData.map(function (item) {
+              this.state.itemData.map(item => {
                 return <ListGroup className={classes.listItem} key={item.id}>
                   <h2 className={classes.itemName}>{item.name}</h2>
                   <h5>Purchase Date</h5>
-                  <p>{item.purchaseDate}</p>
+                  <p>{moment(item.purchaseDate).format('DD/MM/YYYY')}</p>
                   <h5>Durability</h5>
                   <p>{calculateDurability(item.purchaseDate, item.estimatedDurability)} day(s)</p>
                   <div className={classes.buttonGroup}>
                     <Button size='sm' variant='info'>Edit</Button>
-                    <Button size='sm' variant='secondary'>Delete</Button>
+                    <Button size='sm' variant='secondary' onClick={() => this.handleDelete(item)}>Delete</Button>
                   </div>
                   {/* </ListGroup.Item> */}
                 </ListGroup>
@@ -155,11 +213,11 @@ const styles = {
     textTransform: 'capitalize',
   },
   listItem: {
-    backgroundColor: '#C9A468',
+    backgroundColor: colours.primaryDark,
     border: '1px solid black',
     borderRadius: '15%',
     boxShadow: '5px 5px 2px grey',
-    color: 'black',
+    color: 'white',
     height: '10%',
     margin: '1%',
     padding: '2% 0%',

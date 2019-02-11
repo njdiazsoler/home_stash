@@ -4,20 +4,19 @@ import SideBarLink from './SideBarLink';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-
 const SideBar = (props) => {
-
-  const { classes, data } = props;
+  let data = ['kitchen', 'bathroom', 'Store Room', 'Bedroom']
+  const { classes } = props;
   return (
     <div>
       <h2>Overview</h2>
       <nav>
         <ul className={classes.navList}>
-          {data.stashData ?
-            data.stashData.map(function(data) 
-            { return (<li key={data.id} className={classes.buttonMargin}>
+          {data ?
+            data.map(function(data) 
+            { return (<li key={data} className={classes.buttonMargin}>
               <Button style={{ width: '100%', textTransform: 'capitalize' }} variant='secondary' onClick={props.onClick}>
-                <SideBarLink path={`/home/${data.name}`} text={data.name} data={data}/>
+                <SideBarLink path={`/home/${data}`} text={data} data={data}/>
               </Button>
             </li>)}) :
             null}

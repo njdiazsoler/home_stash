@@ -5,6 +5,7 @@ import injectStyle from 'react-jss';
 import SideBar from './client/admin/components/SideBar';
 import { Route, Switch } from "react-router-dom";
 import StashOverview from './client/admin/components/StashOverview';
+import colours from './client/resources/Colours'
 // import ApiBase from './client/admin/api/apiBase';
 
 class App extends Component {
@@ -31,19 +32,21 @@ class App extends Component {
 
   }
 
-  handleRoute = ({ match, location }) => {
-    const stashData = this.state.data.stashData;
-    if (match.url !== '/home' && match.url !== '/' && match.url !== '/home/') {
-      let curStash = {};
-      stashData.forEach(function (stash) {
-        if (stash.name === match.params.id) {
-          curStash = stash;
-        }
-      })
-      return <StashOverview data={curStash} key={location.pathname} location={location} refresh={() => this.refreshItemList(curStash)} />
-    } else {
-      return <Home data={this.state.data.stashData} />
-    }
+  handleRoute = ({ match, location, history }) => {
+    if (this.state.data && this.state.data.stashData) {
+      const stashData = this.state.data.stashData;
+      if (match.url !== '/home' && match.url !== '/' && match.url !== '/home/') {
+        let curStash = {};
+        stashData.forEach(function (stash) {
+          if (stash.name === match.params.id) {
+            curStash = stash;
+          }
+        })
+        return <StashOverview data={curStash} key={location.pathname} location={location} history={history} refresh={() => this.refreshItemList(curStash)} />
+      } else {
+        return <Home data={this.state.data.stashData} />
+      }
+    } return null
   }
 
   refreshItemList = (data) => {
@@ -91,7 +94,7 @@ const styles = {
   },
   sideBarContainer: {
     alignItems: 'center',
-    backgroundColor: '#BE8629',
+    backgroundColor: colours.primary,
     color: 'white',
     display: 'flex',
     flexFlow: 'column',
