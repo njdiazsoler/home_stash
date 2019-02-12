@@ -4,17 +4,17 @@ import React, { Component } from 'react';
 import Title from '../components/Title';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import moment from 'moment';
-import colours from '../../resources/Colours'
+import colours from '../../resources/Colours';
 
 class StashOverview extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       confirmAction: false,
       curRoute: '',
       currentItem: '',
       data: this.props.location.state,
+      deletingUser: false,
       history: this.props.history || false,
       itemData: [],
       formFields: {
@@ -26,41 +26,44 @@ class StashOverview extends Component {
       },
       isLoading: true,
       showNewItemModal: false,
+      result: ''
     };
   }
 
+  addNewItem = item => {
+    const newItemData = this.state.itemData.slice();
+    newItemData.push(item);
+    this.setState({ itemData: newItemData })
+  }
+
   cancelForm = () => {
-    const formFields = { name: '', quantity: '', purchaseDate: '', estimatedDurability: '' };
+    const formFields = { name: '', quantityAmount: '', quantityType: '', purchaseDate: '', estimatedDurability: '' };
     this.setState({ showNewItemModal: !this.state.showNewItemModal, formFields: formFields });
   }
 
   componentDidMount = () => {
-    fetch(`http://localhost:3002/home/${this.props.data.name}`)
-      .then(response => response.json())
-      .then(result => {
-        this.setState({ itemData: result });
-      });
-
-    setTimeout(() => {
-      this.setState({ isLoading: false })
-    }, 2000)
+    this.getItems();
   }
 
   deleteItem = () => {
     const { currentItem } = this.state;
-    console.log(JSON.stringify(this.state.currentItem.id))
     fetch(`http://localhost:3002/home/${this.props.data.name}/${currentItem.id}`, {
       method: 'delete',
-      // body: JSON.stringify({id: currentItem.id}),
-      // headers: { 'Content-Type': 'application/json' },
     })
-      .then(response => response.json())
-      .then(result => {
-        this.setState({ currentItem: '' });
+      .then(response => { return response.json() })
+      .then(response => {
+        this.setState({ currentItem: '', confirmAction: false, deletingUser: false });
       });
-
   }
 
+  getItems = () => {
+    fetch(`http://localhost:3002/home/${this.props.data.name}`)
+      .then(response => response.json())
+      .then(result => {
+        this.setState({ itemData: result, isLoading: false });
+      })
+      .catch(error => this.setState({ error, isLoading: false }));
+  }
 
   handleChange = (e) => {
     const formFields = this.state.formFields;
@@ -69,13 +72,14 @@ class StashOverview extends Component {
   }
 
   handleDelete = (item) => {
-    this.setState({ confirmAction: true, currentItem: item })
+    this.setState({ confirmAction: true, currentItem: item, deletingUser: true })
   }
 
   handleSubmit = () => {
     const { formFields } = this.state;
     if (formFields) {
-      formFields.stashId = this.state.data.id;
+      formFields.stashId = this.props.data.id;
+      console.log('form fields are: ', formFields);
       this.submitForm({ formFields });
     }
   }
@@ -87,11 +91,14 @@ class StashOverview extends Component {
         method: 'post',
         body: JSON.stringify(opts.formFields),
         headers: { 'Content-Type': 'application/json' }
-      }).then(response => { response.json(); console.log(response); })
-      .then(this.setState({ showNewItemModal: false }))
+      }).then(response => { return response.json(); })
+      .then(response => {
+        this.setState({ showNewItemModal: false }, this.addNewItem(response))
+      })
   }
 
   confirmActionModal = () => {
+    const { classes } = this.props;
     return (<Modal show={this.state.confirmAction} onHide={() => this.setState({ confirmAction: false })}>
       <Modal.Header closeButton>
         <Modal.Title>Confirm Action</Modal.Title>
@@ -100,13 +107,14 @@ class StashOverview extends Component {
         <p>Are you sure you want to delete Item permanently?</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant='info' onClick={this.deleteItem}>Delete Item</Button>
+        <Button className={classes.primaryButton} variant='primary' onClick={this.deleteItem}>Delete Item</Button>
         <Button variant='secondary' onClick={() => this.setState({ confirmAction: false })}>Cancel</Button>
       </Modal.Footer>
     </Modal>)
   }
 
   addNewItemModal = () => {
+    const { classes } = this.props;
     return (
       <Modal show={this.state.showNewItemModal} onHide={() => this.setState({ showNewItemModal: false })}>
         <Modal.Header closeButton>
@@ -146,7 +154,7 @@ class StashOverview extends Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant='info' onClick={this.handleSubmit}>Save Item</Button>
+          <Button className={classes.primaryButton} variant='primary' onClick={this.handleSubmit}>Save Item</Button>
           <Button variant='secondary' onClick={this.cancelForm}>Cancel</Button>
         </Modal.Footer>
       </Modal>
@@ -174,7 +182,7 @@ class StashOverview extends Component {
                   <h5>Durability</h5>
                   <p>{calculateDurability(item.purchaseDate, item.estimatedDurability)} day(s)</p>
                   <div className={classes.buttonGroup}>
-                    <Button size='sm' className={classes.primaryButton} variant='info'>Edit</Button>
+                    <Button size='sm' className={classes.primaryButton} variant='primary'>Edit</Button>
                     <Button size='sm' variant='secondary' onClick={() => this.handleDelete(item)}>Delete</Button>
                   </div>
                   {/* </ListGroup.Item> */}

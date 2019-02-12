@@ -24,7 +24,7 @@ const SideBar = (props) => {
         </ul>
       </nav>
       <Link to='/home'>
-        <Button variant='info' className={classes.primaryButton} onClick={props.onClick}>
+        <Button variant='primary' className={classes.primaryButton} onClick={props.onClick}>
           Home
       </Button>
       </Link>

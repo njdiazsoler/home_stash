@@ -6,7 +6,6 @@ import SideBar from './client/admin/components/SideBar';
 import { Route, Switch } from "react-router-dom";
 import StashOverview from './client/admin/components/StashOverview';
 import colours from './client/resources/Colours'
-// import ApiBase from './client/admin/api/apiBase';
 
 class App extends Component {
   constructor(props) {
@@ -29,7 +28,6 @@ class App extends Component {
   }
 
   handleClick = () => {
-
   }
 
   handleRoute = ({ match, location, history }) => {
@@ -74,8 +72,6 @@ class App extends Component {
     );
   }
 }
-
-
 
 const styles = {
   contentContainer: {
