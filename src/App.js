@@ -16,7 +16,7 @@ class App extends Component {
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
     fetch('http://localhost:3002/home')
       .then(response => response.json())
       .then(result => {
@@ -80,6 +80,7 @@ const styles = {
     display: 'flex',
     flexFlow: 'column',
     height: '100%',
+    marginLeft: '15%',
     width: '85%',
   },
   loaderContainer: {
@@ -94,7 +95,9 @@ const styles = {
     color: 'white',
     display: 'flex',
     flexFlow: 'column',
-    width: '13%'
+    height: '100vh',
+    position: 'fixed',
+    width: '15%',
   },
 }
 

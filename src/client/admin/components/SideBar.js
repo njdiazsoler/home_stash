@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import colours from '../../resources/Colours'
 
 const SideBar = (props) => {
-  let data = ['kitchen', 'bathroom', 'Store Room', 'Bedroom']
+  let data = ['kitchen', 'bathroom', 'store room', 'bedroom']
   const { classes } = props;
   return (
     <div>
@@ -26,7 +26,7 @@ const SideBar = (props) => {
       <Link to='/home'>
         <Button variant='primary' className={classes.primaryButton} onClick={props.onClick}>
           Home
-      </Button>
+        </Button>
       </Link>
     </div>
   )

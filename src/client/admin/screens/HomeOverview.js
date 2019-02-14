@@ -32,7 +32,8 @@ class Home extends Component {
               <div key={stash.id} className={classes.stashName}>
                 <Title key={stash.name} onClick='#'>{stash.name}</Title>
                 <p>{stash.createdAt}</p>
-              </div>)
+              </div>
+              )
           })}
         {/* <div>
           <Button variant='primary'>Create Stash</Button>
