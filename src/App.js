@@ -11,7 +11,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      response: '',
       data: [],
     }
   }
@@ -24,10 +23,7 @@ class App extends Component {
       })
     setTimeout(() => {
       this.setState({ isLoading: false })
-    }, 5000)
-  }
-
-  handleClick = () => {
+    }, 1000)
   }
 
   handleRoute = ({ match, location, history }) => {
@@ -47,17 +43,13 @@ class App extends Component {
     } return null
   }
 
-  refreshItemList = (data) => {
-    console.log('refreshing data...');
-    this.setState({ data: data })
-  }
-
   render() {
     const { classes } = this.props;
+    console.log(this.state.data);
     return (
       <div className="App">
         <div className={classes.sideBarContainer}>
-          <SideBar onClick={this.handleClick} data={this.state.data} />
+          <SideBar data={this.state.data} />
         </div>
         <div className={classes.contentContainer}>
           <h1>Home Stash</h1>

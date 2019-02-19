@@ -2,7 +2,7 @@
 import injectStyle from 'react-jss';
 import React, { Component } from 'react';
 import Title from '../components/Title';
-import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
+import { Button, Card, Form, Modal } from 'react-bootstrap';
 import moment from 'moment';
 import colours from '../../resources/Colours';
 
@@ -15,7 +15,6 @@ class StashOverview extends Component {
       data: this.props.location.state,
       deletingUser: false,
       editingItem: false,
-      history: this.props.history || false,
       itemData: [],
       formFields: {
         estimatedDurability: '',
@@ -70,7 +69,7 @@ class StashOverview extends Component {
       }
     })
     this.cancelForm();
-    this.setState({ currentItem: '', editingItem: false });
+    this.setState({ currentItem: '', editingItem: false,  });
   }
 
   getItems = () => {
@@ -192,13 +191,11 @@ class StashOverview extends Component {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
           {this.state.editingItem ?
             <Button className={classes.primaryButton} variant='primary' onClick={this.saveChanges}>Save Item</Button> :
             <Button className={classes.primaryButton} variant='primary' onClick={this.handleSubmit}>Save Item</Button>
           }
           <Button variant='secondary' onClick={this.cancelForm}>Cancel</Button>
-        </Modal.Footer>
       </Modal>
     )
   }
@@ -208,9 +205,9 @@ class StashOverview extends Component {
     return (
       <div className={classes.overviewContainer}>
         <div className={classes.containerHeader}>
-        <Title className={classes.headerTitle}>{this.props.location.state}</Title>
-        <Button className={classes.addNewButton} size='lg' variant='secondary' onClick={() => this.setState({ showForm: true })}>Add New Item</Button>
-          </div>
+          <Title className={classes.headerTitle}>{this.props.location.state}</Title>
+          <Button className={classes.addNewButton} size='lg' variant='secondary' onClick={() => this.setState({ showForm: true })}>Add New Item</Button>
+        </div>
         {this.addNewItemModal()}
         {this.confirmActionModal()}
         <div className={classes.itemsContainer}>
@@ -222,18 +219,36 @@ class StashOverview extends Component {
               this.state.itemData.map(item => {
                 let purchaseDate = moment(item.purchaseDate)
                 let estimatedDurability = moment(item.estimatedDurability).startOf('day')
-                return <ListGroup className={classes.listItem} key={item.id}>
-                  <h2 className={classes.itemName}>{item.name}</h2>
-                  <h5>Purchase Date</h5>
-                  <p>{purchaseDate.format('DD/MM/YYYY')}</p>
-                  <h5>Durability</h5>
-                  <p>{moment(estimatedDurability - purchaseDate).format('D[ day(s)]')}</p>
-                  <div className={classes.buttonGroup}>
-                    <Button size='sm' className={classes.primaryButton} onClick={() => this.handleEdit(item)} variant='primary'>Edit</Button>
+                let now = moment().startOf('day');
+                return <Card text='dark'
+                  className={classes.listItem} 
+                  key={item.id}>
+                  <Card.Header>
+                    <h5>{item.name}</h5>
+                  </Card.Header>
+                  <Card.Body>
+                    <Card.Title>
+                      Purchase Date
+                    </Card.Title>
+                    <Card.Text>
+                      {purchaseDate.format('DD/MM/YYYY')}
+                    </Card.Text>
+                    <Card.Title>
+                      Durability
+                    </Card.Title>
+                    <Card.Text>
+                      {moment(estimatedDurability - now).format('D[ day(s)]')}
+                    </Card.Text>
+                  </Card.Body>
+                  <Card.Footer>
+                    <div className={classes.buttonGroup}>
+                    <Button size='sm'
+                      className={classes.primaryButton} 
+                      onClick={() => this.handleEdit(item)} variant='primary'>Edit</Button>
                     <Button size='sm' variant='secondary' onClick={() => this.handleDelete(item)}>Delete</Button>
-                  </div>
-                  {/* </ListGroup.Item> */}
-                </ListGroup>
+                    </div>
+                  </Card.Footer>
+                </Card>
               }) :
               <div></div>}
         </div>
@@ -258,10 +273,10 @@ const styles = {
     justifyContent: 'space-between',
     margin: '0 2.5%',
   },
-  headerTitle: { 
-    borderBottom: '2px solid black', 
-    paddingBottom: '1%', 
-    textTransform: 'capitalize', 
+  headerTitle: {
+    borderBottom: '2px solid black',
+    paddingBottom: '1%',
+    textTransform: 'capitalize',
     margin: '3% 2%',
     textAlign: 'left',
     width: '100%',
@@ -277,15 +292,14 @@ const styles = {
     textTransform: 'capitalize',
   },
   listItem: {
-    backgroundColor: colours.primary,
-    border: '1px solid black',
-    borderRadius: '15%',
+    // backgroundColor: colours.primary,
+    // border: '1px solid black',
+    // borderRadius: '15%',
     boxShadow: '5px 5px 2px grey',
-    color: 'white',
+    color: 'black',
     height: '10%',
     margin: '1%',
-    padding: '2% 0%',
-    width: '25%',
+    width: '18%',
   },
   loaderContainer: {
     position: 'relative',
