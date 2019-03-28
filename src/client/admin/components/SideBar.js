@@ -6,20 +6,24 @@ import { Button } from 'react-bootstrap';
 import colours from '../../resources/Colours'
 
 const SideBar = (props) => {
-  let data = ['kitchen', 'bathroom', 'store room', 'bedroom']
+  let stashNames = [];
+  props.data.map(function(data){
+    return stashNames.push(data.name);
+  })
   const { classes } = props;
   return (
     <div>
       <h2>Overview</h2>
       <nav>
         <ul className={classes.navList}>
-          {data ?
-            data.map(function(data) 
-            { return (<li key={data} className={classes.buttonMargin}>
-              <Button style={{ width: '100%', textTransform: 'capitalize' }} variant='secondary' onClick={props.onClick}>
-                <SideBarLink path={`/home/${data}`} text={data} data={data}/>
-              </Button>
-            </li>)}) :
+          {stashNames ?
+            stashNames.map(function (data) {
+              return (<li key={data} className={classes.buttonMargin}>
+                <Button style={{ width: '100%', textTransform: 'capitalize' }} variant='secondary' onClick={props.onClick}>
+                  <SideBarLink path={`/home/${data}`} text={data} data={data} />
+                </Button>
+              </li>)
+            }) :
             null}
         </ul>
       </nav>

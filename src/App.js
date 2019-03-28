@@ -12,23 +12,27 @@ class App extends Component {
     super(props);
     this.state = {
       data: [],
+      isLoading: true
     }
   }
 
   componentDidMount = async () => {
-    fetch('http://localhost:3002/home')
-      .then(response => response.json())
-      .then(result => {
-        this.setState({ data: result });
-      })
-    setTimeout(() => {
-      this.setState({ isLoading: false })
-    }, 1000)
+    try {
+      let data = await fetch('http://localhost:3002/home')
+        .then(response => response.json())
+      // this.setState({ data: data.stashData , isLoading: false });
+      setTimeout(() => {
+        this.setState({  data: data.stashData, isLoading: false })
+      }, 1000)
+      return true
+    } catch (error) {
+      throw console.log('error is ', error)
+    }
   }
 
   handleRoute = ({ match, location, history }) => {
-    if (this.state.data && this.state.data.stashData) {
-      const stashData = this.state.data.stashData;
+    if (this.state.data) {
+      const stashData = this.state.data;
       if (match.url !== '/home' && match.url !== '/' && match.url !== '/home/') {
         let curStash = {};
         stashData.forEach(function (stash) {
@@ -38,14 +42,13 @@ class App extends Component {
         })
         return <StashOverview data={curStash} key={location.pathname} location={location} history={history} refresh={() => this.refreshItemList(curStash)} />
       } else {
-        return <Home data={this.state.data.stashData} />
+        return <Home data={this.state.data} />
       }
     } return null
   }
 
   render() {
     const { classes } = this.props;
-    console.log(this.state.data);
     return (
       <div className="App">
         <div className={classes.sideBarContainer}>

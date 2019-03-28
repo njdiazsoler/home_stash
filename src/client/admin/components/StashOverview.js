@@ -15,7 +15,7 @@ class StashOverview extends Component {
       data: this.props.location.state,
       deletingUser: false,
       editingItem: false,
-      itemData: [],
+      itemData: this.props.data.items,
       formFields: {
         estimatedDurability: '',
         name: '',
@@ -40,7 +40,10 @@ class StashOverview extends Component {
   }
 
   componentDidMount = () => {
-    this.getItems();
+    // this.getItems();
+    setTimeout(() => {
+      this.setState({ isLoading: false })
+    }, 1000)
   }
 
   deleteItem = () => {
@@ -72,14 +75,14 @@ class StashOverview extends Component {
     this.setState({ currentItem: '', editingItem: false,  });
   }
 
-  getItems = () => {
-    fetch(`http://localhost:3002${this.props.location.pathname}`)
-      .then(response => response.json())
-      .then(result => {
-        this.setState({ itemData: result, isLoading: false });
-      })
-      .catch(error => this.setState({ error, isLoading: false }));
-  }
+  // getItems = () => {
+  //   fetch(`http://localhost:3002${this.props.location.pathname}`)
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       this.setState({ itemData: result, isLoading: false });
+  //     })
+  //     .catch(error => this.setState({ error, isLoading: false }));
+  // }
 
   handleChange = (e) => {
     const formFields = this.state.formFields;
@@ -201,6 +204,7 @@ class StashOverview extends Component {
   }
 
   render() {
+    console.log(this.state.itemData)
     const { classes } = this.props;
     return (
       <div className={classes.overviewContainer}>
