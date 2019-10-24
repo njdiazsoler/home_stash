@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import injectStyle from 'react-jss';
 import Title from '../components/Title';
 import { Card, CardGroup } from 'react-bootstrap';
-// import apiBase from '../api/apiBase'
 
 class Home extends Component {
   constructor(props) {
@@ -43,7 +42,6 @@ class Home extends Component {
   // }
 
   render() {
-    console.log(this.props.data);
     const { classes } = this.props;
     return (
       <div className={classes.homeContainer}>

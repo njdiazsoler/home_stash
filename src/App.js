@@ -24,7 +24,6 @@ class App extends Component {
       setTimeout(() => {
         this.setState({  data: data.stashData, isLoading: false })
       }, 1000)
-      return true
     } catch (error) {
       throw console.log('error is ', error)
     }
